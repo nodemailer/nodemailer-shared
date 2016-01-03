@@ -1,6 +1,6 @@
 {
   "name": "nodemailer-shared",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "description": "Shared methods for the nodemailer stack",
   "main": "lib/shared.js",
   "directories": {
