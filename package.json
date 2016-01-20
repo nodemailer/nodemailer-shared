@@ -1,6 +1,6 @@
 {
   "name": "nodemailer-shared",
-  "version": "1.0.2",
+  "version": "1.0.3",
   "description": "Shared methods for the nodemailer stack",
   "main": "lib/shared.js",
   "directories": {
@@ -23,7 +23,7 @@
   },
   "homepage": "https://github.com/nodemailer/nodemailer-shared#readme",
   "dependencies": {
-    "nodemailer-fetch": "1.0.0"
+    "nodemailer-fetch": "1.2.1"
   },
   "devDependencies": {
     "chai": "^3.4.1",
