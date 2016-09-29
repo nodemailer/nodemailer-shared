@@ -1,15 +1,15 @@
-/* eslint no-unused-expressions:0, no-invalid-this:0 */
+/* eslint no-unused-expressions:0, no-invalid-this:0, prefer-arrow-callback: 0 */
 /* globals beforeEach, afterEach, describe, it */
 
 'use strict';
 
-var chai = require('chai');
-var expect = chai.expect;
-var shared = require('../lib/shared');
+const chai = require('chai');
+const expect = chai.expect;
+const shared = require('../lib/shared');
 
-var http = require('http');
-var fs = require('fs');
-var zlib = require('zlib');
+const http = require('http');
+const fs = require('fs');
+const zlib = require('zlib');
 
 chai.config.includeStack = true;
 
@@ -27,7 +27,7 @@ describe('Logger tests', function () {
 
 describe('Connection url parser tests', function () {
     it('Should parse connection url', function () {
-        var url = 'smtps://user:pass@localhost:123?tls.rejectUnauthorized=false&name=horizon';
+        let url = 'smtps://user:pass@localhost:123?tls.rejectUnauthorized=false&name=horizon';
         expect(shared.parseConnectionUrl(url)).to.deep.equal({
             secure: true,
             port: 123,
@@ -44,7 +44,7 @@ describe('Connection url parser tests', function () {
     });
 
     it('should not choke on special symbols in auth', function () {
-        var url = 'smtps://user%40gmail.com:%3Apasswith%25Char@smtp.gmail.com';
+        let url = 'smtps://user%40gmail.com:%3Apasswith%25Char@smtp.gmail.com';
         expect(shared.parseConnectionUrl(url)).to.deep.equal({
             secure: true,
             host: 'smtp.gmail.com',
@@ -57,8 +57,8 @@ describe('Connection url parser tests', function () {
 });
 
 describe('Resolver tests', function () {
-    var port = 10337;
-    var server;
+    let port = 10337;
+    let server;
 
     beforeEach(function (done) {
         server = http.createServer(function (req, res) {
@@ -72,7 +72,7 @@ describe('Resolver tests', function () {
                     'Content-Type': 'text/plain',
                     'Content-Encoding': 'gzip'
                 });
-                var stream = zlib.createGzip();
+                let stream = zlib.createGzip();
                 stream.pipe(res);
                 stream.write('<p>Tere, tere</p><p>vana kere!</p>\n');
                 stream.end();
@@ -92,7 +92,7 @@ describe('Resolver tests', function () {
     });
 
     it('should set text from html string', function (done) {
-        var mail = {
+        let mail = {
             data: {
                 html: '<p>Tere, tere</p><p>vana kere!</p>\n'
             }
@@ -105,7 +105,7 @@ describe('Resolver tests', function () {
     });
 
     it('should set text from html buffer', function (done) {
-        var mail = {
+        let mail = {
             data: {
                 html: new Buffer('<p>Tere, tere</p><p>vana kere!</p>\n')
             }
@@ -118,7 +118,7 @@ describe('Resolver tests', function () {
     });
 
     it('should set text from a html file', function (done) {
-        var mail = {
+        let mail = {
             data: {
                 html: {
                     path: __dirname + '/fixtures/message.html'
@@ -133,7 +133,7 @@ describe('Resolver tests', function () {
     });
 
     it('should set text from an html url', function (done) {
-        var mail = {
+        let mail = {
             data: {
                 html: {
                     path: 'http://localhost:' + port + '/message.html'
@@ -148,7 +148,7 @@ describe('Resolver tests', function () {
     });
 
     it('should set text from redirecting url', function (done) {
-        var mail = {
+        let mail = {
             data: {
                 html: {
                     path: 'http://localhost:' + port + '/redirect.html'
@@ -163,7 +163,7 @@ describe('Resolver tests', function () {
     });
 
     it('should set text from gzipped url', function (done) {
-        var mail = {
+        let mail = {
             data: {
                 html: {
                     path: 'http://localhost:' + port + '/compressed.html'
@@ -178,7 +178,7 @@ describe('Resolver tests', function () {
     });
 
     it('should set text from a html stream', function (done) {
-        var mail = {
+        let mail = {
             data: {
                 html: fs.createReadStream(__dirname + '/fixtures/message.html')
             }
@@ -196,7 +196,7 @@ describe('Resolver tests', function () {
     });
 
     it('should return an error', function (done) {
-        var mail = {
+        let mail = {
             data: {
                 html: {
                     path: 'http://localhost:' + (port + 1000) + '/message.html'
@@ -210,8 +210,8 @@ describe('Resolver tests', function () {
     });
 
     it('should return encoded string as buffer', function (done) {
-        var str = '<p>Tere, tere</p><p>vana kere!</p>\n';
-        var mail = {
+        let str = '<p>Tere, tere</p><p>vana kere!</p>\n';
+        let mail = {
             data: {
                 html: {
                     encoding: 'base64',
@@ -229,7 +229,7 @@ describe('Resolver tests', function () {
     describe('data uri tests', function () {
 
         it('should resolve with mime type and base64', function (done) {
-            var mail = {
+            let mail = {
                 data: {
                     attachment: {
                         path: 'data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAUAAAAFCAYAAACNbyblAAAAHElEQVQI12P4//8/w38GIAXDIBKE0DHxgljNBAAO9TXL0Y4OHwAAAABJRU5ErkJggg=='
@@ -244,7 +244,7 @@ describe('Resolver tests', function () {
         });
 
         it('should resolve with mime type and plaintext', function (done) {
-            var mail = {
+            let mail = {
                 data: {
                     attachment: {
                         path: 'data:image/png,tere%20tere'
@@ -259,7 +259,7 @@ describe('Resolver tests', function () {
         });
 
         it('should resolve with plaintext', function (done) {
-            var mail = {
+            let mail = {
                 data: {
                     attachment: {
                         path: 'data:,tere%20tere'
@@ -274,7 +274,7 @@ describe('Resolver tests', function () {
         });
 
         it('should resolve with mime type, charset and base64', function (done) {
-            var mail = {
+            let mail = {
                 data: {
                     attachment: {
                         path: 'data:image/png;charset=iso-8859-1;base64,iVBORw0KGgoAAAANSUhEUgAAAAUAAAAFCAYAAACNbyblAAAAHElEQVQI12P4//8/w38GIAXDIBKE0DHxgljNBAAO9TXL0Y4OHwAAAABJRU5ErkJggg=='
